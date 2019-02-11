@@ -1,0 +1,112 @@
+expression = ws a:additive ws { return a; }
+
+additive
+  = ws first:multiplicative ws rest:(("+" / "-") ws multiplicative ws)+ {
+    return rest.reduce(function(memo, curr) {
+      return {op: curr[0], args:[memo, curr[2]]};
+    }, first);
+  }
+  / ws m:multiplicative ws { return m; }
+
+multiplicative
+  = ws first:diceroll ws rest:(("*" / "/") ws diceroll ws)+ {
+    return rest.reduce(function(memo, curr) {
+      return {op: curr[0], args: [memo, curr[2]]};
+    }, first);
+  }
+  / ws p:diceroll ws { return p; }
+
+diceroll
+  = ws first:primary ws rest:(("d") faces ws)+ {
+    return rest.reduce(function(memo, curr) {
+      var mods = curr[1].modifiers;
+      delete curr[1].modifiers;
+      if (curr[1].botch){
+        var botch = curr[1].botch;
+        delete curr[1].botch;
+      	return {op: curr[0], args:[memo, curr[1], botch], mods:mods};
+      }
+      else {
+      	return {op: curr[0], args:[memo, curr[1]], mods:mods};
+      }
+    }, first);
+  }
+  / ws rest:(("d") faces ws)+ {
+    return rest.reduce(function(memo, curr) {
+      var mods = curr[1].modifiers;
+      delete curr[1].modifiers;
+      if (curr[1].botch){
+        var botch = curr[1].botch;
+        delete curr[1].botch;
+      	return {op: curr[0], args:[memo, curr[1], botch], mods:mods};
+      }
+      else {
+      	return {op: curr[0], args:[memo, curr[1]], mods:mods};
+      }
+    }, {'op': 'static', value: 1});
+  }
+  / ws p:primary ws { return p; }
+
+faces
+  = n:dietype mod:(("r>=" / "r>" / "r<=" / "r<" / "r=" / "r" /
+  					  "e>=" / "e>" / "e<=" / "e<" / "e=" / "e" /	
+  					  "s>=" / "s>" / "s<=" / "s<" / "s=" / "s" /		
+                       "b") primary)* ws {
+    var botch = 0;
+    var modifiers = [];
+    for (var i = 0; i < mod.length; i++)
+      switch(mod[i][0]){      
+          case "r":  mod[i][0] = "r<=";         	
+          case "r=":             	      	
+          case "r>":             	
+          case "r<=":             	
+          case "r<":               	
+          case "r>=":   modifiers.push({mod: "reroll", filtertype: mod[i][0].substring(1), filtervalue: mod[i][1]});
+              break;
+              
+          case "e":  mod[i][0] = "e>=";         	
+          case "e=":             	      	
+          case "e>":             	
+          case "e<=":             	
+          case "e<":               	
+          case "e>=":   modifiers.push({mod: "explode", filtertype: mod[i][0].substring(1), filtervalue: mod[i][1]});
+              break;
+              
+          case "s":  mod[i][0] = "s>=";         	
+          case "s=":             	      	
+          case "s>":             	
+          case "s<=":             	
+          case "s<":               	
+          case "s>=":   modifiers.push({mod: "count", filtertype: mod[i][0].substring(1), filtervalue: mod[i][1]});
+              break;
+              
+          case "b": 	botch = mod[i][1];
+              break;
+          default:
+              mod[i][0] = "|" + mod[i][0] + "|";
+      }
+    if (n.value == "Stress")
+     {	n.botch = botch; }
+  	n.modifiers = modifiers;
+    return n;
+  }
+  / ws "(" ws a:additive ws ")" ws { return a; }
+  
+dietype
+  = number
+  / "S" { return {'op': 'static', value: "Stress"}; }
+  / "F" { return {'op': 'static', value: "Fudge"}; }
+
+primary
+  = ws n:number ws {return n;}
+  / ws "(" ws a:additive ws ")" ws { return a; }
+
+number
+  = i:integer { return {'op': 'static', value: i};}
+    
+integer
+  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
+	/ "-" digits:[0-9]+ { return parseInt(digits.join(""), 10) * -1; }
+  
+ws
+  = [ \r\n\t]*

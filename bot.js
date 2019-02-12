@@ -146,20 +146,20 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				case '/stress':
 					var mod = '+0';
 				
-					if (args.length > 0 && args[0].substring(0, 1) = '+' || args[0].substring(0, 1) = '-'){
+					if (args.length > 0 && args[0].substring(0, 1) == '+' || args[0].substring(0, 1) == '-'){
 						mod = args[0];
 					}
-					else if (args.length > 1 && args[1].substring(0, 1) = '+' || args[1].substring(0, 1) = '-'){
+					else if (args.length > 1 && args[1].substring(0, 1) == '+' || args[1].substring(0, 1) == '-'){
 						mod = args[0];						
 					}
 					
 					
 					var botch = 'b0';
 				
-					if (args.length > 0 && args[0].substring(0, 1) = 'b'){
+					if (args.length > 0 && args[0].substring(0, 1) == 'b'){
 						botch = args[0].substring(1);
 					}
-					else if (args.length > 1 && args[1].substring(0, 1) = 'b'){
+					else if (args.length > 1 && args[1].substring(0, 1) == 'b'){
 						botch = args[0].substring(1);						
 					}
 				

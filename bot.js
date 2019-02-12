@@ -52,7 +52,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 									break
 								default:
 									bot.sendMessage({
-										to: userID,
+										to: channelID,
 										message: 'available art calculations are *xp* or *score*'
 									});	
 									break;								
@@ -74,7 +74,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 									break
 								default:
 									bot.sendMessage({
-										to: userID,
+										to: channelID,
 										message: 'available ability calculations are *xp* or *score*'
 									});	
 									break;								
@@ -97,7 +97,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 									break;
 								default:
 									bot.sendMessage({
-										to: userID,
+										to: channelID,
 										message: 'available experience calculations are *art* or *ability*'
 									});	
 									break;								
@@ -118,7 +118,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 									break;
 								default:
 									bot.sendMessage({
-										to: userID,
+										to: channelID,
 										message: 'available score calculations are *art* or *ability*'
 									});	
 									break;								
@@ -126,7 +126,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							break;
 						default:
 							bot.sendMessage({
-								to: userID,
+								to: channelID,
 								message: "available calculations are *xp* and *score*"
 							});		
 							break;			

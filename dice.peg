@@ -94,8 +94,8 @@ faces
   
 dietype
   = number
-  / "S" { return {'op': 'static', value: "Stress"}; }
-  / "F" { return {'op': 'static', value: "Fudge"}; }
+  / "S"i { return {'op': 'static', value: "Stress"}; }
+  / "F"i { return {'op': 'static', value: "Fudge"}; }
 
 primary
   = ws n:number ws {return n;}

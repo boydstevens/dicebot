@@ -27,18 +27,14 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 	 try {
 		// Our bot needs to know if it will execute a command
 		// It will listen for messages that will start with `!`
-		if (message.substring(0, 1) == '!' || !(evt.d.guild_id)) {
-			var args;
-			if (message.substring(0, 1) == '!')
-				 args = message.substring(1).split(' ');
-			else
-				 args = message.split(' ');
-			var cmd = args[0];
-		   
+		
+			var args = message.split(' ');
+			var cmd = args[0];		   
 			args = args.splice(1);
+			
 			switch(cmd) {					
 					
-				case 'calc':
+				case '/calc':
 					switch(args[0]) {
 						case 'art': switch(args[1]){
 								case 'xp': 
@@ -135,18 +131,58 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							});		
 							break;			
 					}
-				break;				
-					
-				default:
-					var eval = dice.roll(message.substring(1), ''); 
+				break;	
+				
+				case '/r':					
+				case '/roll':
+					var eval = dice.roll(args.join(), ''); 
 					 
 					bot.sendMessage({
 						to: channelID,
 						message: "```Result: " +  eval.val + "\n  Data:" +  eval.msg + "```"
 					});	
+				break;				
+					
+				case '/stress':
+					var mod = '+0';
+				
+					if (args.length > 0 && args[0].substring(0, 1) = '+' || args[0].substring(0, 1) = '-'){
+						mod = args[0];
+					}
+					else if (args.length > 1 && args[1].substring(0, 1) = '+' || args[1].substring(0, 1) = '-'){
+						mod = args[0];						
+					}
+					
+					
+					var botch = 'b0';
+				
+					if (args.length > 0 && args[0].substring(0, 1) = 'b'){
+						botch = args[0].substring(1);
+					}
+					else if (args.length > 1 && args[1].substring(0, 1) = 'b'){
+						botch = args[0].substring(1);						
+					}
+				
+					var eval = dice.roll('1dS' + botch + ' ' + mod , ''); 
+					 
+					bot.sendMessage({
+						to: channelID,
+						message: "```Result: " +  eval.val + "\n  Data:" +  eval.msg + "```"
+					});	
+				break;		
+					
+				case '/simple':
+					var mod = parseInt(args[0]);					
+				
+					var eval = dice.roll('1d10+' + mod , ''); 
+					 
+					bot.sendMessage({
+						to: channelID,
+						message: "```Result: " +  eval.val + "\n  Data:" +  eval.msg + "```"
+					});	
+				break;
 			 }
 		}
-	}
 	catch(error){
 		if (error.message){
 			bot.sendMessage({

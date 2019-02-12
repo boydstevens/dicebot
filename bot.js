@@ -157,10 +157,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					var botch = 'b0';
 				
 					if (args.length > 0 && args[0].substring(0, 1) == 'b'){
-						botch = args[0].substring(1);
+						botch = args[0];
 					}
 					else if (args.length > 1 && args[1].substring(0, 1) == 'b'){
-						botch = args[0].substring(1);						
+						botch = args[0];						
 					}
 				
 					var eval = dice.roll('1dS' + botch + ' ' + mod , ''); 

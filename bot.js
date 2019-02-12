@@ -172,7 +172,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				break;		
 					
 				case '/simple':
-					var mod = parseInt(args[0]);					
+					var mod = args.length > 0 ? parseInt(args[0]) : 0;					
 				
 					var eval = dice.roll('1d10+' + mod , ''); 
 					 

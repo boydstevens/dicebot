@@ -150,7 +150,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						mod = args[0];
 					}
 					else if (args.length > 1 && (args[1].substring(0, 1) == '+' || args[1].substring(0, 1) == '-')){
-						mod = args[0];						
+						mod = args[1];						
 					}
 					
 					
@@ -160,7 +160,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						botch = args[0];
 					}
 					else if (args.length > 1 && args[1].substring(0, 1) == 'b'){
-						botch = args[0];						
+						botch = args[1];						
 					}
 				
 					var eval = dice.roll('1dS' + botch + ' ' + mod , ''); 
